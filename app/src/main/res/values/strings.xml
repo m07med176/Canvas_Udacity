@@ -11,4 +11,10 @@
     <string name="button_name">Click me</string>
     <string name="button_loading">We are loading </string>
     <string name="title_activity_detail">DetailActivity</string>
+
+
+    <string name="glide">Glide - An image loading and caching library for Android focused on smooth scrolling</string>
+    <string name="loadApp">LoadApp - Current repository by udacity</string>
+    <string name="retrofit">Retrofit - A type-safe HTTP client for Android and the JVM</string>
+
 </resources>
