@@ -19,17 +19,17 @@ class LoadingButton @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr) {
     private var widthSize = 0
     private var heightSize = 0
-    private var buttonText: String
+    private lateinit var buttonText: String
     private var CProgress = 0f
     private var BProgress = 0f
-
-    private val backgroundColor = ResourcesCompat.getColor(resources, R.color.colorPrimary, null)
-    private val loadingBackgroundColor =
-        ResourcesCompat.getColor(resources, R.color.colorPrimaryDark, null)
-    private val textColor = ResourcesCompat.getColor(resources, R.color.white, null)
-
-
     private var valueAnimator = ValueAnimator()
+
+    /// Custom Attribute
+    private var borderColor = Color.BLACK
+    private var borderWidth = 4.0f
+
+
+
 
 
     var buttonState: ButtonState by Delegates.observable<ButtonState>(ButtonState.Completed) { p, old, new ->
@@ -64,7 +64,17 @@ class LoadingButton @JvmOverloads constructor(
 
     }
 
-    private val paint = Paint().apply {
+    init {
+        buttonText = resources.getString(R.string.downloading)
+    }
+
+    private val backgroundColor = ResourcesCompat.getColor(resources, R.color.colorPrimary, null)
+    private val loadingBackgroundColor =
+        ResourcesCompat.getColor(resources, R.color.colorPrimaryDark, null)
+    private val textColor = ResourcesCompat.getColor(resources, R.color.white, null)
+
+
+      private val paint = Paint().apply {
         isAntiAlias = true
         color = backgroundColor
     }
@@ -74,12 +84,6 @@ class LoadingButton @JvmOverloads constructor(
         color = textColor
         textSize = resources.getDimension(R.dimen.default_text_size)
     }
-
-
-    init {
-        buttonText = resources.getString(R.string.downloading)
-    }
-
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
@@ -91,6 +95,10 @@ class LoadingButton @JvmOverloads constructor(
     }
 
     private fun drawButton(canvas: Canvas?) {
+        paint.color = borderColor
+        paint.style = Paint.Style.STROKE
+        paint.strokeWidth = borderWidth
+
         canvas?.drawRect(0f, 0f, widthSize.toFloat(), heightSize.toFloat(), paint)
     }
 
@@ -143,3 +151,4 @@ class LoadingButton @JvmOverloads constructor(
         setMeasuredDimension(w, h)
     }
 }
+

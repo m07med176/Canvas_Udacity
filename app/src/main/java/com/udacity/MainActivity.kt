@@ -22,22 +22,26 @@ import kotlinx.android.synthetic.main.content_main.*
 
 
 class MainActivity : AppCompatActivity() {
-    private var downloadID: Long = 0
-
     private lateinit var notificationManager: NotificationManager
     private lateinit var pendingIntent: PendingIntent
+
+    /// DownLoading
     private lateinit var url: String
     private lateinit var title: String
     private lateinit var downloadManager: DownloadManager
     private var downloadStatus = ""
+    private var downloadID: Long = 0
 
     companion object {
+        /// Link Resources
         private const val GlIDE_URL =
             "https://github.com/bumptech/glide/archive/refs/heads/master.zip"
         private const val LOAD_APP_URL =
             "https://github.com/udacity/nd940-c3-advanced-android-programming-project-starter/archive/master.zip"
         private const val RETROFIT_URL =
             "https://github.com/square/retrofit/archive/refs/heads/master.zip"
+
+        /// Notification Channel
         private const val CHANNEL_ID = "channelId"
     }
 
@@ -46,10 +50,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
+        custom_button.setOnClickListener { download()  }
+
+        // Receiver Registration
         registerReceiver(broadcastReceiver, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
-        custom_button.setOnClickListener {
-            download()
-        }
+
     }
 
     // region Receiver
@@ -84,24 +89,24 @@ class MainActivity : AppCompatActivity() {
             R.id.glide -> {
                 url = GlIDE_URL
                 title = getString(R.string.glide)
-                startDownload()
+                startDownloading()
             }
             R.id.loadApp -> {
                 url = LOAD_APP_URL
                 title = getString(R.string.loadApp)
-                startDownload()
+                startDownloading()
             }
             R.id.retrofit -> {
                 url = RETROFIT_URL
                 title = getString(R.string.retrofit)
-                startDownload()
+                startDownloading()
             }
             else -> Toast.makeText(this, "please select the file to download", Toast.LENGTH_LONG)
                 .show()
         }
     }
 
-    private fun startDownload() {
+    private fun startDownloading() {
         custom_button.buttonState = ButtonState.Clicked
         val request =
             DownloadManager.Request(Uri.parse(url))
@@ -114,7 +119,6 @@ class MainActivity : AppCompatActivity() {
             downloadManager.enqueue(request)
     }
     // endregion Download
-
 
     // region Notification
     @SuppressLint("StringFormatInvalid")
@@ -130,7 +134,7 @@ class MainActivity : AppCompatActivity() {
             PendingIntent.FLAG_UPDATE_CURRENT
         )
         var builder = NotificationCompat.Builder(applicationContext, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_launcher_background)
+            .setSmallIcon(R.drawable.ic_assistant_black_24dp)
             .setContentTitle(resources.getString(R.string.notification_title))
             .setContentText(resources.getString(R.string.notification_description, title))
             .setPriority(NotificationCompat.PRIORITY_HIGH)
